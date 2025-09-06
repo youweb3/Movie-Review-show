@@ -1,0 +1,44 @@
+.movieheader {
+    padding: 10px 30px;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.movie-h2head{
+    color: white;
+    font-size: 27px;
+}
+
+.movie-filter{
+    list-style: none;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+}
+
+.movie-filter-item{
+   padding: 7px 17px;
+   cursor: pointer;
+   color: white;
+}
+
+.center-ele{
+    display: flex;
+    align-items: center;
+}
+
+.movie-sorting{
+    border: none;
+    outline: none;
+    font-size: 17px;
+    font-family: inherit;
+    height:30px;
+    padding: 0 5px;
+    margin: 0 12px;
+}
+
+.movie-shows{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}

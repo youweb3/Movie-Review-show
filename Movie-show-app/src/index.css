@@ -3,9 +3,16 @@
   src: url('./assets/Fonts/Montserrat-VariableFont_wght.woff');
 }
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-
+  background-color: rgb(125, 31, 31);
+  color: black;
 }
 

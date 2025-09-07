@@ -27,6 +27,10 @@
     align-items: center;
 }
 
+.movie-filter-item.active{
+    border-bottom: 1px solid aqua;
+}
+
 .movie-sorting{
     border: none;
     outline: none;

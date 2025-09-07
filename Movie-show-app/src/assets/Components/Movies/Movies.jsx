@@ -3,8 +3,9 @@ import './Movies.css'
 import WatchMovies from './WatchMovies'
 
 const Movies = () => {
-    const [movies, setMovies] = useState([]);//create state for store the data
-    console.log(Object.keys(movies));
+    const [movies, setMovies] = useState([]);//create state for store the data/ Movies currently shown
+    const[allMoviesFiltered, setAllMoviesFiltered] = useState([]); // orginal unfilterd list
+    const [givingRating, setRating] =useState(0);// current rating  filter
     
     //.then((res) => console.log(res.json()));
     //.the((res) => res.json().then((data)=> console.log(data)));
@@ -27,18 +28,46 @@ const Movies = () => {
 
     /////////////////////////////////.async await: more readabale and no cunfusing
     useEffect(() => {
-        fetchMovies();
+        fetchMovies();// run once when component loads
     }, [])
+    //[] run only on mount
+    //calls fetchMovies
 
     const fetchMovies = async () => {
         const response = await fetch('https://api.themoviedb.org/3/discover/movie?api_key=2e329f464285ec2d95e238087927516d');
         const data = await response.json();
-        console.log(Object.keys(data.results[0]));//see keys of first movie
-        console.log(data);//see full array
-        setMovies(data.results);
+
+        console.log(Object.keys(data.results[0]));//show keys of first movie
+        console.log(data);//show full API object
+
+        setMovies(data.results); //update state with movies
+        setAllMoviesFiltered(data.results) 
+        //keep copy for filtering
     };
 
+    //Fetches movies.
+    // Saves them in two states: one for display (movies), one as backup (allMoviesFiltered)
 
+    const handleFilter = (rating) => {
+        if (rating === givingRating){ //clicked same rating → reset
+            setRating(0);
+            setMovies(allMoviesFiltered); // restore full list
+        }
+        else{
+            setRating(rating); // update filter value
+            const filteredMovies = allMoviesFiltered.filter((movie) => movie.vote_average >=rating);
+
+            setMovies(filteredMovies); //show filtered list
+        }
+    };
+
+    //If user clicks the same rating again, it resets filter.
+    //Otherwise, filters allMoviesFiltered by vote_average >= rating.
+    // In short:
+    // movies = current displayed list.
+    // allMoviesFiltered = backup of original API results.
+    // givingRating = rating filter state.
+    // handleFilter = filters or resets list.
 
     return (
         <section className="movie-list">
@@ -46,9 +75,10 @@ const Movies = () => {
                 <h2 className='center-ele movie-h2head'>Popular</h2>
                 <div className="center-ele movielistadd">
                     <ul className="center-ele movie-filter">
-                        <li className="movie-filter-item">8+</li>
-                        <li className="movie-filter-item">7+</li>
-                        <li className="movie-filter-item">6+</li>
+                        <li className={givingRating===9 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(9)}>9+</li>
+                        <li className={givingRating===8 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(8)}>8+</li>
+                        <li className={givingRating===7 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(7)}>7+</li>
+                        <li className={givingRating===6 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(6)}>6+</li>
                     </ul>
                     <select name="" id="" className="movie-sorting">
                         <option value="">Sort By</option>
@@ -63,8 +93,10 @@ const Movies = () => {
             </header>
 
             <div className='movie-shows'>
-                {movies.map((movie) => (
-                    <WatchMovies key={movie.id} movie={movie} />))
+                {movies.length >0 ? (movies.map((movie) => (
+                    <WatchMovies key={movie.id} movie={movie} />)))
+                    :
+                    (<p>No Movies found for this rate</p>)
                 }
             </div>
         </section>

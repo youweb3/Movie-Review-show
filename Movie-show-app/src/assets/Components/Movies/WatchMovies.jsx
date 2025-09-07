@@ -2,21 +2,21 @@ import React from 'react'
 import './WatchMovies.css'
 import rating from '../../../assets/Image/rating.png'
 
-const WatchMovies = () => {
+const WatchMovies = ({movie}) => {
     return (
-        <a href='' className='movie-show'>
-            <img src='https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p8818865_p_v8_as.jpg'
+        <a href={`https://www.themoviedb.org/movie/${movie.id}`} target='_blank' className='movie-show'>
+            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 className='movie-img' alt='Movie image'
             />
             <div className="movie-details">
-                <h3 className='movie-details-h3'>Project</h3>
+                <h3 className='movie-details-h3'>{movie.title}</h3>
                 <div className="center-ele movie-date">
                     <p>
-                        06-09-2025
+                        {movie.release_date}
                     </p>
-                    <p>8.0{''} <img className='emoji-class' alt='rating icon' src={rating} /></p>
+                    <p>{movie.vote_average} <img className='emoji-class' alt='rating icon' src={rating} /></p>
                 </div>
-                <p className='movie-desceripton'>Details of Movies</p>
+                <p className='movie-desceripton'>{movie.overview.slice(0,100)+'.'}</p>
             </div>
         </a>
 

@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Movies.css'
 import WatchMovies from './WatchMovies'
 
 const Movies = () => {
+    const [movies, setMovies] = useState([]);//create state for store the data
+    console.log(Object.keys(movies));
+    
     //.then((res) => console.log(res.json()));
     //.the((res) => res.json().then((data)=> console.log(data)));
     ///////////.then
@@ -28,10 +31,12 @@ const Movies = () => {
     }, [])
 
     const fetchMovies = async () => {
-        const response = await fetch('https://api.themoviedb.org/3/person/popular?api_key=2e329f464285ec2d95e238087927516d');
+        const response = await fetch('https://api.themoviedb.org/3/discover/movie?api_key=2e329f464285ec2d95e238087927516d');
         const data = await response.json();
-        console.log(data);
-    }
+        console.log(Object.keys(data.results[0]));//see keys of first movie
+        console.log(data);//see full array
+        setMovies(data.results);
+    };
 
 
 
@@ -58,7 +63,9 @@ const Movies = () => {
             </header>
 
             <div className='movie-shows'>
-                <WatchMovies />
+                {movies.map((movie) => (
+                    <WatchMovies key={movie.id} movie={movie} />))
+                }
             </div>
         </section>
     )

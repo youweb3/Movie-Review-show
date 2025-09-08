@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './Movies.css'
 import WatchMovies from './WatchMovies'
+import FilterMovies from './FilterMovies';
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);//create state for store the data/ Movies currently shown
-    const[allMoviesFiltered, setAllMoviesFiltered] = useState([]); // orginal unfilterd list
-    const [givingRating, setRating] =useState(0);// current rating  filter
-    
+    const [allMoviesFiltered, setAllMoviesFiltered] = useState([]); // orginal unfilterd list
+    const [givingRating, setRating] = useState(0);// current rating  filter
+
     //.then((res) => console.log(res.json()));
     //.the((res) => res.json().then((data)=> console.log(data)));
     ///////////.then
@@ -41,7 +42,7 @@ const Movies = () => {
         console.log(data);//show full API object
 
         setMovies(data.results); //update state with movies
-        setAllMoviesFiltered(data.results) 
+        setAllMoviesFiltered(data.results)
         //keep copy for filtering
     };
 
@@ -49,13 +50,13 @@ const Movies = () => {
     // Saves them in two states: one for display (movies), one as backup (allMoviesFiltered)
 
     const handleFilter = (rating) => {
-        if (rating === givingRating){ //clicked same rating → reset
+        if (rating === givingRating) { //clicked same rating → reset
             setRating(0);
             setMovies(allMoviesFiltered); // restore full list
         }
-        else{
+        else {
             setRating(rating); // update filter value
-            const filteredMovies = allMoviesFiltered.filter((movie) => movie.vote_average >=rating);
+            const filteredMovies = allMoviesFiltered.filter((movie) => movie.vote_average >= rating);
 
             setMovies(filteredMovies); //show filtered list
         }
@@ -74,12 +75,13 @@ const Movies = () => {
             <header className="movieheader">
                 <h2 className='center-ele movie-h2head'>Popular</h2>
                 <div className="center-ele movielistadd">
-                    <ul className="center-ele movie-filter">
-                        <li className={givingRating===9 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(9)}>9+</li>
-                        <li className={givingRating===8 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(8)}>8+</li>
-                        <li className={givingRating===7 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(7)}>7+</li>
-                        <li className={givingRating===6 ? 'movie-filter-item active' : 'movie-filter-item'} onClick={()=>handleFilter(6)}>6+</li>
-                    </ul>
+
+                    <FilterMovies
+                        givingRating={givingRating}
+                        onRatingButtonClick={handleFilter}
+                        ratings={[9, 8, 7, 6]}
+                    />
+
                     <select name="" id="" className="movie-sorting">
                         <option value="">Sort By</option>
                         <option value="">Date</option>
@@ -93,7 +95,7 @@ const Movies = () => {
             </header>
 
             <div className='movie-shows'>
-                {movies.length >0 ? (movies.map((movie) => (
+                {movies.length > 0 ? (movies.map((movie) => (
                     <WatchMovies key={movie.id} movie={movie} />)))
                     :
                     (<p>No Movies found for this rate</p>)
